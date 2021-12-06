@@ -26,27 +26,26 @@ from turboguard import Sanitizer, BlacklistedError
 
 
 blacklist = [
-    ('\u1d100', '\u1d1ff'),   # Blacklist Unicode range
-    '\u0635',                 # Blacklist single character
-    ...
+    ('\U0001d100', '\U0001d1ff'),  # Blacklist Unicode range
+    ('\u0600', '\u0610'),          # Blacklist Unicode range
+    '\u0635',                      # Blacklist single character
 ]
 
 replace = [
     ('\u0636', '\u0637'),     # Replace \u0636 by \u0637
-    ...
 ]
 
 with Sanitizer(blacklist, replace) as sanitize:    # Loading(Slow) part
     try:
         print(sanitize('foo bar baz'))             # Fast call!
     except BlacklistedError:
-        # TODO: Handle exception
+        print('Validation failed!')
 ```
 
 ## Contribution
 
 The `turboguard/core.c` file contains all logics for allocation and memory
-cleanup as well as the `core_sanitize` function which the only function 
+cleanup as well as the `core_sanitize` function which is the only function 
 to use the given database.
 
 `turboguard/__init__.py` just contains the Python wrapper arround the C 
