@@ -24,6 +24,10 @@ cover:
 	pytest --cov=$(PRJ) tests
 
 
+.PHONY: dist
+dist: 
+	python setup.py sdist
+
 .PHONY: clean
 clean:
 	python setup.py clean
