@@ -1,4 +1,3 @@
-from .sanitizer import sanitize
 from . import core
 
 
