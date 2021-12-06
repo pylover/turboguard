@@ -1,7 +1,10 @@
 PRJ = turboguard
 
 .PHONY: all
-all: 
+all: build
+
+.PHONY: build
+build: 
 	python setup.py build_ext --inplace
 
 .PHONY: lint
@@ -25,3 +28,5 @@ cover:
 clean:
 	python setup.py clean
 	rm -rf build/*
+	rm -rf $(PRJ)/__pycache__
+	rm -f $(PRJ)/*.so
