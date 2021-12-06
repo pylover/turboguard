@@ -20,9 +20,10 @@ core = Extension(
 )
 
 setup(
-    name='sanitizer',
+    name='turboguard',
     version=package_version,
-    description='sanitize characters',
+    description='Fast Unicode mapping and character blacklists using Python '
+                'C extension.',
     author='Ati',
     packages=['turboguard'],
     install_requires=dependencies,
