@@ -1,3 +1,5 @@
 flake8
 pytest-cov
 pytest-pudb
+ipython
+ropevim

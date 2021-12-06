@@ -1,3 +1,7 @@
+.PHONY: all
+all: 
+	python setup.py build_ext --inplace
+
 .PHONY: lint
 lint:
 	flake8
@@ -11,3 +15,9 @@ env:
 .PHONY: cover
 cover:
 	pytest --cov=strbench tests
+
+
+.PHONY: clean
+clean:
+	python setup.py clean
+	rm -rf build/*
