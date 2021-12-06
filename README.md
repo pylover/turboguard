@@ -49,7 +49,7 @@ cleanup as well as the `core_sanitize` function which is the only function
 to use the given database.
 
 `turboguard/__init__.py` just contains the Python wrapper arround the C 
-module and force cealnup and initialization using Python's context manager
+module and force cleanup and initiate using the Python's context manager
 (the `with` syntax).
 
 ### What to do after fork:
@@ -58,7 +58,7 @@ module and force cealnup and initialization using Python's context manager
 
 *It's highly recommended to create a virtual environment at the first.*
 
-Install project in editable mode: `pip install -e ... `
+Install project in editable mode: `pip install -e . `
 
 ```bash
 make env
