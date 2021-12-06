@@ -6,6 +6,11 @@
 
 static PyObject *BlacklistedError;
 
+struct replace {
+    Py_UCS4 replace;
+    Py_UCS4 by;
+};
+
 
 struct range {
     Py_UCS4 start;
@@ -13,10 +18,29 @@ struct range {
 };
 
 struct sanitizer {
+    /* Blacklist */
     Py_ssize_t blacklist_len; 
     Py_ssize_t blacklist_index; 
     struct range *blacklist;
+
+    /* replace list */
+    Py_ssize_t replacelist_len; 
+    Py_ssize_t replacelist_index; 
+    struct replace *replacelist;
 };
+
+
+static Py_UCS4
+core_replace_char(struct sanitizer *instance, const Py_UCS4 c) {
+    struct replace *list = instance->replacelist;
+    for (int i = 0; i < instance->replacelist_len; i++) {
+        if (c == list[i].replace) {
+            return list[i].by;
+        }
+    }
+    return c;
+}
+
 
 static int
 core_blacklist_check_char(struct sanitizer *instance, const Py_UCS4 c) {
@@ -29,8 +53,9 @@ core_blacklist_check_char(struct sanitizer *instance, const Py_UCS4 c) {
     return 0;
 }
 
+
 static PyObject *
-core_blacklist_check(PyObject *self, PyObject *args) {
+core_sanitize(PyObject *self, PyObject *args) {
     PyObject *handle;
     PyObject *input;
 
@@ -49,21 +74,28 @@ core_blacklist_check(PyObject *self, PyObject *args) {
     }
 
     //PyObject_Print(input, stdout, 0);
-    
     Py_ssize_t len = PyUnicode_GET_LENGTH(input);
     int kind = PyUnicode_KIND(input);
-    void *data = PyUnicode_DATA(input);
+    void *datain = PyUnicode_DATA(input);
+    PyObject* output = PyUnicode_New(len, (2 ^ (kind * 8)) - 1);
+    void *dataout = PyUnicode_DATA(output);
 
+    Py_UCS4 ci, co;
     for (int c = 0; c < len; c++) {
-        Py_UCS4 ch = PyUnicode_READ(kind, data, c);
-        if (core_blacklist_check_char(instance, ch)) {
+        ci = PyUnicode_READ(kind, datain, c);
+        
+        /* blacklist */
+        if (core_blacklist_check_char(instance, ci)) {
             PyErr_SetString(BlacklistedError, "Blacklisted.");
             return NULL;
         }
+    
+        /* replace */
+        co = core_replace_char(instance, ci);
+        PyUnicode_WRITE(kind, dataout, c, co);
     }
 
-    /* Return nothing */
-    Py_RETURN_NONE;
+    return output;
 }
 
 
@@ -90,6 +122,28 @@ core_blacklist_append(PyObject *self, PyObject *args) {
 
 
 static PyObject *
+core_replacelist_append(PyObject *self, PyObject *args) {
+    PyObject *handle;
+    uint32_t replace, by;
+
+    /* Parse arguments. */
+    if (!PyArg_ParseTuple(args, "OII", &handle, &replace, &by)) {
+        return NULL;
+    }
+    
+    /* Unbox */
+    struct sanitizer *instance = (struct sanitizer*)
+        PyCapsule_GetPointer(handle, NULL);
+     
+    instance->replacelist[instance->replacelist_index++] = 
+        (struct replace){replace, by};
+
+    /* Return nothing */
+    Py_RETURN_NONE;
+}
+
+
+static PyObject *
 core_create(PyObject *self, PyObject *args) {
     struct sanitizer *instance = malloc(sizeof(struct sanitizer));
     if (instance == NULL) {
@@ -98,8 +152,13 @@ core_create(PyObject *self, PyObject *args) {
     }
     
     instance->blacklist_index = 0;
+    instance->replacelist_index = 0;
+
     /* Parse arguments. */
-    if (!PyArg_ParseTuple(args, "n", &instance->blacklist_len)) {
+    if (!PyArg_ParseTuple(args, "nn", 
+                &instance->blacklist_len,
+                &instance->replacelist_len
+            )) {
         return NULL;
     }
     
@@ -109,6 +168,16 @@ core_create(PyObject *self, PyObject *args) {
         sizeof(struct range)
     );
     if (instance->blacklist == NULL) {
+        PyErr_SetString(PyExc_MemoryError, "Cannot allocate memory");
+        return NULL;
+    }
+
+    /* Allocate replacelist */
+    instance->replacelist = calloc(
+        instance->replacelist_len,
+        sizeof(struct replace)
+    );
+    if (instance->replacelist == NULL) {
         PyErr_SetString(PyExc_MemoryError, "Cannot allocate memory");
         return NULL;
     }
@@ -136,8 +205,9 @@ core_dispose(PyObject *self, PyObject *args) {
     
     /* Deallocate */
     free(instance->blacklist);
+    free(instance->replacelist);
     free(instance);
-    
+
     /* Return nothing */
     Py_RETURN_NONE;
 }
@@ -163,10 +233,16 @@ static PyMethodDef SanitizerMethods[] = {
         "Append a range into blacklist."
     },
     {
-        "blacklist_check",  
-        core_blacklist_check, 
+        "replacelist_append",  
+        core_replacelist_append, 
         METH_VARARGS,
-        "Check an input for blacklist."
+        "Append a range into replacelist."
+    },
+    {
+        "sanitize",  
+        core_sanitize, 
+        METH_VARARGS,
+        "Replace and check for blacklist."
     },
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };

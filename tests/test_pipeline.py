@@ -12,10 +12,34 @@ def test_blacklist():
     ]
 
     with Sanitizer(blacklist) as s:
-        s.blacklist_check('abcش')
+        s('abcش')
 
         with pytest.raises(BlacklistedError):
-            s.blacklist_check('haaa')
+            s('haaa')
 
         with pytest.raises(BlacklistedError):
-            s.blacklist_check('!')
+            s('!')
+
+
+def test_replace():
+    replace = [
+        ('a', 'A')
+    ]
+
+    with Sanitizer(replace=replace) as s:
+        assert s('abcada') == 'AbcAdA'
+
+
+def test_mixed():
+    blacklist = [
+        ('b', 'f')
+    ]
+    replace = [
+        ('a', 'A')
+    ]
+
+    with Sanitizer(blacklist, replace) as s:
+        with pytest.raises(BlacklistedError):
+            s('b')
+
+        assert s('ahaia') == 'AhAiA'

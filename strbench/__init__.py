@@ -8,8 +8,9 @@ __version__ = '0.1.0'
 class Sanitizer:
     _handle = None
 
-    def __init__(self, blacklist=None):
+    def __init__(self, blacklist=None, replace=None):
         self.blacklist = blacklist or []
+        self.replacelist = replace or []
 
     def _import_blacklist(self):
         """Slow method!"""
@@ -21,13 +22,22 @@ class Sanitizer:
 
             core.blacklist_append(self._handle, ord(start), ord(end))
 
-    def blacklist_check(self, string):
-        core.blacklist_check(self._handle, string)
+    def _import_replacelist(self):
+        """Slow method!"""
+        for item in self.replacelist:
+            replace, by = item
+            core.replacelist_append(self._handle, ord(replace), ord(by))
+
+    def __call__(self, string):
+        return core.sanitize(self._handle, string)
 
     def __enter__(self):
         blacklistsize = len(self.blacklist)
-        self._handle = core.create(blacklistsize)
+        replacelistsize = len(self.replacelist)
+
+        self._handle = core.create(blacklistsize, replacelistsize)
         self._import_blacklist()
+        self._import_replacelist()
         return self
 
     def __exit__(self, extype, exvalue, traceback):
