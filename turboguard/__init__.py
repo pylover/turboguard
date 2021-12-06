@@ -1,4 +1,5 @@
 from . import core
+from .core import BlacklistedError
 
 
 __version__ = '0.1.0'

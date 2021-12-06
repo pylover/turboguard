@@ -1,7 +1,6 @@
 import pytest
 
-from turboguard import Sanitizer
-from turboguard.core import BlacklistedError
+from turboguard import Sanitizer, BlacklistedError
 
 
 def test_blacklist():
