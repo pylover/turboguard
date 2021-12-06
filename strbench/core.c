@@ -83,10 +83,10 @@ core_blacklist_append(PyObject *self, PyObject *args) {
     
     instance->blacklist[instance->blacklist_index++] = 
         (struct range){start, end};
+
     /* Return nothing */
     Py_RETURN_NONE;
 }
-
 
 
 static PyObject *
@@ -120,6 +120,7 @@ core_create(PyObject *self, PyObject *args) {
     return Py_BuildValue("O", handle);
 }
 
+
 static PyObject *
 core_dispose(PyObject *self, PyObject *args) {
     PyObject *handle;
@@ -140,6 +141,7 @@ core_dispose(PyObject *self, PyObject *args) {
     /* Return nothing */
     Py_RETURN_NONE;
 }
+
 
 static PyMethodDef SanitizerMethods[] = {
     {

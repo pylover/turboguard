@@ -28,6 +28,7 @@ class Sanitizer:
         blacklistsize = len(self.blacklist)
         self._handle = core.create(blacklistsize)
         self._import_blacklist()
+        return self
 
     def __exit__(self, extype, exvalue, traceback):
         core.dispose(self._handle)
