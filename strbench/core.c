@@ -65,11 +65,6 @@ core_sanitize(PyObject *self, PyObject *const *args, Py_ssize_t nargs) {
     PyObject *handle = args[0];
     PyObject *input = args[1];
 
-    // /* Parse arguments. */
-    // if (!PyArg_ParseTuple(args, "OU", &handle, &input)) {
-    //     return NULL;
-    // }
-   
     /* Unbox */
     struct sanitizer *instance = (struct sanitizer*)
         PyCapsule_GetPointer(handle, NULL);
@@ -246,7 +241,7 @@ static PyMethodDef SanitizerMethods[] = {
     },
     {
         "sanitize",  
-        (PyCFunction)core_sanitize, 
+        (PyCFunction) core_sanitize, 
         METH_FASTCALL,
         "Replace and check for blacklist."
     },
