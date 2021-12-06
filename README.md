@@ -38,9 +38,9 @@ replace = [
 
 with Sanitizer(blacklist, replace) as sanitize:    # Loading(Slow) part
     try:
-      print(sanitize('foo bar baz'))                 # Fast call!
+        print(sanitize('foo bar baz'))             # Fast call!
     except BlacklistedError:
-      print('Validation failed!')
+        # TODO: Handle exception
 ```
 
 ## Contribution
