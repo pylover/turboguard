@@ -43,3 +43,4 @@ def test_mixed():
             s('b')
 
         assert s('ahaia') == 'AhAiA'
+        assert s('') == ''

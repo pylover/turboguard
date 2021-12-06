@@ -55,14 +55,20 @@ core_blacklist_check_char(struct sanitizer *instance, const Py_UCS4 c) {
 
 
 static PyObject *
-core_sanitize(PyObject *self, PyObject *args) {
-    PyObject *handle;
-    PyObject *input;
-
-    /* Parse arguments. */
-    if (!PyArg_ParseTuple(args, "OU", &handle, &input)) {
-        return NULL;
+core_sanitize(PyObject *self, PyObject *const *args, Py_ssize_t nargs) {
+    if (nargs != 2) {
+        PyErr_SetString(
+                PyExc_TypeError, 
+                "sanitize() takes 2 positional arguments: handler, string."
+        );
     }
+    PyObject *handle = args[0];
+    PyObject *input = args[1];
+
+    // /* Parse arguments. */
+    // if (!PyArg_ParseTuple(args, "OU", &handle, &input)) {
+    //     return NULL;
+    // }
    
     /* Unbox */
     struct sanitizer *instance = (struct sanitizer*)
@@ -240,8 +246,8 @@ static PyMethodDef SanitizerMethods[] = {
     },
     {
         "sanitize",  
-        core_sanitize, 
-        METH_VARARGS,
+        (PyCFunction)core_sanitize, 
+        METH_FASTCALL,
         "Replace and check for blacklist."
     },
     {NULL, NULL, 0, NULL}        /* Sentinel */
