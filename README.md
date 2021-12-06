@@ -1,5 +1,6 @@
 # turboguard
 
+[![PyPI](http://img.shields.io/pypi/v/turboguard.svg)](https://pypi.python.org/pypi/turboguard)
 [![Build](https://github.com/pylover/turboguard/actions/workflows/build.yml/badge.svg)](https://github.com/pylover/turboguard/actions/workflows/build.yml)
 [![Coverage Status](https://coveralls.io/repos/github/pylover/turboguard/badge.svg?branch=master)](https://coveralls.io/github/pylover/turboguard?branch=master)
 

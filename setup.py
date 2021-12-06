@@ -22,11 +22,35 @@ core = Extension(
 setup(
     name='turboguard',
     version=package_version,
-    description='Fast Unicode mapping and character blacklists using Python '
-                'C extension.',
-    author='Ati',
     packages=['turboguard'],
     install_requires=dependencies,
     ext_modules=[core],
-    # TODO: classifiers
+
+    # Info
+    license='MIT',
+    author='Vahid Mardani',
+    author_email='vahid.mardani@gmail.com',
+    url='http://github.com/pylover/turboguard',
+    description='Fast Unicode mapping and character blacklists using Python '
+                'C extension.',
+    long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
+
+    # Classifiers
+    classifiers=[
+        'Environment :: Web Environment',
+        'Intended Audience :: Developers',
+        'Natural Language :: English',
+        'Development Status :: 5 - Production/Stable',
+        'License :: OSI Approved :: MIT License',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Topic :: Software Development',
+        'Topic :: Internet :: WWW/HTTP',
+        'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
+        'Topic :: Software Development :: Libraries',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+    ]
 )
