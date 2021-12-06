@@ -44,14 +44,48 @@ with Sanitizer(blacklist, replace) as sanitize:    # Loading(Slow) part
 
 ## Contribution
 
+The `turboguard/core.c` file contains all logics for allocation and memory
+cleanup as well as the `core_sanitize` function which the only function 
+to use the given database.
+
+`turboguard/__init__.py` just contains the Python wrapper arround the C 
+module and force cealnup and initialization using Python's context manager
+(with syntax).
+
+### What to do after fork:
+
+#### Setup development environment
+
+It's highly recommended to create a virtual environment at the first.
+
 ```bash
 make env
+```
+
+#### Build the C extension
+
+```bash
 make build
+```
+
+#### Test your environment
+
+```bash
 make cover
 ```
 
-Afterward, for development sycle:
+### What to do after edit:
+
+#### Lint  code using:
+
+```bash
+make lint
+```
+
+#### Pass tests:
 
 ```bash
 make clean build cover
 ```
+
+#### Submit a pull request.
