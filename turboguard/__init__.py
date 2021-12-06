@@ -20,13 +20,13 @@ class Sanitizer:
             else:
                 start, end = item
 
-            core.blacklist_append(self._handle, ord(start), ord(end))
+            core.blacklist_appenditem(self._handle, ord(start), ord(end))
 
     def _import_replacelist(self):
         """Slow method!"""
         for item in self.replacelist:
             replace, by = item
-            core.replacelist_append(self._handle, ord(replace), ord(by))
+            core.replacelist_appenditem(self._handle, ord(replace), ord(by))
 
     def __call__(self, string):
         return core.sanitize(self._handle, string)

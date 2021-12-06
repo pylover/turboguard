@@ -101,7 +101,7 @@ core_sanitize(PyObject *self, PyObject *const *args, Py_ssize_t nargs) {
 
 
 static PyObject *
-core_blacklist_append(PyObject *self, PyObject *args) {
+core_blacklist_appenditem(PyObject *self, PyObject *args) {
     PyObject *handle;
     uint32_t start, end;
 
@@ -123,7 +123,7 @@ core_blacklist_append(PyObject *self, PyObject *args) {
 
 
 static PyObject *
-core_replacelist_append(PyObject *self, PyObject *args) {
+core_replacelist_appenditem(PyObject *self, PyObject *args) {
     PyObject *handle;
     uint32_t replace, by;
 
@@ -228,14 +228,14 @@ static PyMethodDef SanitizerMethods[] = {
         "Dispose a sanitizer instance."
     },
     {
-        "blacklist_append",  
-        core_blacklist_append, 
+        "blacklist_appenditem",  
+        core_blacklist_appenditem, 
         METH_VARARGS,
         "Append a range into blacklist."
     },
     {
-        "replacelist_append",  
-        core_replacelist_append, 
+        "replacelist_appenditem",  
+        core_replacelist_appenditem, 
         METH_VARARGS,
         "Append a range into replacelist."
     },
@@ -254,7 +254,7 @@ static char core_doc[] =
 
 static struct PyModuleDef coremodule= {
     PyModuleDef_HEAD_INIT,
-    "strbench.core",   
+    "turboguard.core",   
     core_doc, 
     -1,       /* size of per-interpreter state of the module,
                  or -1 if the module keeps state in global variables. */
@@ -271,7 +271,7 @@ PyInit_core(void) {
     }
 
     BlacklistedError = 
-        PyErr_NewException("strbench.core.BlacklistedError", NULL, NULL);
+        PyErr_NewException("turboguard.core.BlacklistedError", NULL, NULL);
     Py_XINCREF(BlacklistedError);
     if (PyModule_AddObject(m, "BlacklistedError", BlacklistedError) < 0) {
         Py_XDECREF(BlacklistedError);

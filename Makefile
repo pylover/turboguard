@@ -1,3 +1,5 @@
+PRJ = turboguard
+
 .PHONY: all
 all: 
 	python setup.py build_ext --inplace
@@ -14,7 +16,7 @@ env:
 
 .PHONY: cover
 cover:
-	pytest --cov=strbench tests
+	pytest --cov=$(PRJ) tests
 
 
 .PHONY: clean
