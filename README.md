@@ -50,13 +50,15 @@ to use the given database.
 
 `turboguard/__init__.py` just contains the Python wrapper arround the C 
 module and force cealnup and initialization using Python's context manager
-(with syntax).
+(the `with` syntax).
 
 ### What to do after fork:
 
 #### Setup development environment
 
-It's highly recommended to create a virtual environment at the first.
+*It's highly recommended to create a virtual environment at the first.*
+
+Install project in editable mode: `pip install -e ... `
 
 ```bash
 make env
