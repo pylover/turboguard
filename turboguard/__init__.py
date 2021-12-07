@@ -2,7 +2,7 @@ from . import core
 from .core import BlacklistedError
 
 
-__version__ = '1.0.3'
+__version__ = '1.0.4'
 
 
 class Sanitizer:
