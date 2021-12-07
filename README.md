@@ -33,11 +33,14 @@ blacklist = [
 
 replace = [
     ('\u0636', '\u0637'),     # Replace \u0636 by \u0637
+    ('b', 'B'),
 ]
 
 with Sanitizer(blacklist, replace) as sanitize:    # Loading(Slow) part
     try:
-        print(sanitize('foo bar baz'))             # Fast call!
+        # Fast calls
+        assert sanitize('foo bar') == 'foo bar'
+        assert sanitize(None) == None
     except BlacklistedError:
         print('Validation failed!')
 ```

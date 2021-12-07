@@ -64,6 +64,11 @@ core_sanitize(PyObject *self, PyObject *const *args, Py_ssize_t nargs) {
     }
     PyObject *handle = args[0];
     PyObject *input = args[1];
+    
+    /* Return Null if input is Null. */
+    if (input == Py_None) {
+        Py_RETURN_NONE;
+    }
 
     /* Unbox */
     struct sanitizer *instance = (struct sanitizer*)
