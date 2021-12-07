@@ -16,6 +16,6 @@ with Sanitizer(blacklist, replace) as sanitize:    # Loading(Slow) part
     try:
         # Fast calls
         assert sanitize('foo bar') == 'foo Bar'    # Fast call!
-        assert sanitize(None) == None
+        assert sanitize(None) is None
     except BlacklistedError:
         print('Validation failed!')

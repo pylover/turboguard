@@ -43,4 +43,4 @@ def test_mixed():
 
         assert s('ahaia') == 'AhAiA'
         assert s('') == ''
-        assert s(None) == None
+        assert s(None) is None
